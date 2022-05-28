@@ -65,7 +65,6 @@
 //          ================
 
             Node* first;
-            Node* prev;
             Node* last;
 
 //          ===========
