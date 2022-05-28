@@ -26,7 +26,7 @@ using namespace std;
 
 	Node::Node(int listElement, Node* nextPtr, Node* prevPtr) {
 
-		ConstructorBanner();
+		//ConstructorBanner();
 
 		info = listElement;
 		next = nextPtr;
@@ -46,7 +46,7 @@ using namespace std;
 	Node::~Node(void) {
 
 
-		DestructorBanner();
+		//DestructorBanner();
 
 
 	} // Destructor
