@@ -3,48 +3,47 @@
 
 using namespace std;
 
-DoublyLinkedList::DoublyLinkedList() {
+//  ==================================
+    DoublyLinkedList::DoublyLinkedList() {
 
 
-//  ============
-//  Constructors
-//  ============
+    //  ============
+    //  Constructors
+    //  ============
 
-//      ============================
-//      Constructor DoublyLinkedList
-//      ============================
+    //      ============================
+    //      Constructor DoublyLinkedList
+    //      ============================
 
-        ConstructorBanner();
+          //  ConstructorBanner();
 
-        first = last = nullptr;
-
-
-        } // Constructor DoublyLinkedList
-//      ==================================
-
+            first = last = nullptr;
+        
+            } // Constructor DoublyLinkedList
+    //      =================================
 
 
-//  ================
-//  End Constructors
-//  ================
+
+    //  ================
+    //  End Constructors
+    //  ================
 
 
-//  ===========
-//  Destructors
-//  ===========
+    //  ===========
+    //  Destructors
+    //  ===========
 
-//      ===========================
-//      Destructor DoublyLinkedList
-//      ===========================
+    //      ===========================
+    //      Destructor DoublyLinkedList
+    //      ===========================
 
-        DoublyLinkedList::~DoublyLinkedList() {
+            DoublyLinkedList::~DoublyLinkedList() {
 
-            DestructorBanner();
-            DestroyList();
+             // DestructorBanner();
+                DestroyList();
 
-
-        } // Destructor DoublyLinkedList
-//      ================================
+            } // Destructor DoublyLinkedList
+//          ================================
 
 //  ===============
 //  End Destructors
@@ -61,17 +60,23 @@ DoublyLinkedList::DoublyLinkedList() {
 
         void DoublyLinkedList::DestroyList() {
 
-            Node* temp;
+            Node* ptr;
 
             while (first != nullptr) {
 
-                temp = first;
-                first = first->next;
-                delete temp;
+                ptr = first;
+                first = first->next; // moving sequentially down the list, deleting 1x1
+                delete ptr;
 
             } // while
 
             last = nullptr;
+
+            cout << endl << endl;
+            cout << "     =================================================" << endl;
+            cout << "     The list is empty! Add some nodes using the menu." << endl;
+            cout << "     =================================================" << endl;
+            cout << endl;
 
         } // Public M-Function DestroyList
 //      ==================================
@@ -104,13 +109,25 @@ DoublyLinkedList::DoublyLinkedList() {
 
         void DoublyLinkedList::InsertFirst(int value) {
 
-            Node* newNode = new Node(value, first, prev);
+//          =======================================
+//          Variable declarations and node creation
+//          ===================================================
+            Node* newNodePtr = new Node(value, first, nullptr);
+//          ===================================================
 
-            first = newNode;
-            newNode->prev = nullptr;
+//          ==========
+//          Node logic
+//          ===========================
+            newNodePtr->prev = nullptr;
 
-            if (prev != nullptr)
-                first->prev = newNode;
+            if (first != nullptr) {
+
+                first->prev = newNodePtr;
+
+            } // then
+
+            first = newNodePtr;
+//          ===================
 
         } // Public M-Function InsertFirst
 //      ==================================
@@ -121,34 +138,40 @@ DoublyLinkedList::DoublyLinkedList() {
 
         void DoublyLinkedList::InsertLast(int value) {
 
+//          =====================================
+//          If-then clause to offload computation
+//          =====================================
             if (this->Empty()) {
 
                 this->InsertFirst(value);
 
-            } // if
+            } // then
+//          =========
 
             else {
 
-                Node* newNode = new Node(value, nullptr, prev);
-                
-                last = first; // setting last to first so we can traverse to last node with a while loop
+//              =======================================                
+//              Variable Declarations and node creation
+//              =======================================
+                Node* ptr = first;
+                Node* newNodePtr = new Node(value, nullptr, nullptr);
+//              =====================================================
 
-                newNode->next = nullptr; // this new node is last, so newNode->next is set to nullptr
+                while (ptr->next != nullptr) {
 
-             
-                while (last->next != nullptr) {
-
-                    last = last->next; // traversing the list
+                    ptr = ptr->next; // traversing
 
                 } // while
 
-                last->next = newNode;
-
-                newNode->prev = last;
-                
-
+//             ==========
+//             Node logic
+//             =======================
+               newNodePtr->prev = ptr;
+               ptr->next = newNodePtr;
+               newNodePtr->next = nullptr;
+//             ===========================
+ 
             } // else
-
 
         } // Public M-Function InsertLast
 //      =================================
@@ -160,48 +183,68 @@ DoublyLinkedList::DoublyLinkedList() {
 
         void DoublyLinkedList::Insert(int value, int location) {
 
-            Node* temp;
-           
-
-            if ( (location > this->Length() + 1) || (location < 1) ) {
+//          =====================================================       
+//          If-then clauses to error handle & offload computation
+//          ========================================================
+            if ((location > this->Length() + 1) || (location < 1)) {
 
                 cout << endl;
-                cout << "========================" << endl;
-                cout << "Insert Function invoked." << endl;
+                cout << "==============================" << endl;
                 cout << "Insertion location is invalid." << endl;
-                cout << "Terminating execution..." << endl;
-                cout << "========================" << endl;
+                cout << "Please enter a valid location." << endl;
+                cout << "==============================" << endl;
                 cout << endl;
+
+                return;
 
             } // then
 
             else {
 
                 if (location == 1) {
+
                     this->InsertFirst(value);
+
                     return;
-                }
+
+                } // then
 
                 else if (location == this->Length() + 1) {
 
                     this->InsertLast(value);
+
                     return;
-                }
 
-                Node* newNode = new Node(value, nullptr, nullptr);
+                } // else then
 
-                temp = first;
+//              ===================
+//              End If-then clauses
+//              ===================
+
+//              =======================================
+//              Variable Declarations and node creation
+//              =======================================
+                Node* ptr;
+                Node* newNodePtr = new Node(value, nullptr, nullptr);
+//              =====================================================
+
+                ptr = first;
 
                 for (int ii = 1; ii < location - 1; ii++) {
 
-                    temp = temp->next;
+                    ptr = ptr->next; // traversing
 
                 } // for
 
-                newNode->next = temp->next;
-                newNode->prev = temp;
-                temp->next = newNode;
-                newNode->next->prev = newNode;
+
+//              ==========
+//              Node logic
+//              =============================
+                newNodePtr->next = ptr->next;
+                newNodePtr->prev = ptr;
+                ptr->next = newNodePtr;
+                newNodePtr->next->prev = newNodePtr;
+//              ====================================
 
             } // else
 
@@ -225,65 +268,85 @@ DoublyLinkedList::DoublyLinkedList() {
        
         int DoublyLinkedList::Length() {
 
-            int nbNodes = 0;
+//          =====================
+//          Variable declarations
+//          =====================
+            int listLength = 0;
             Node* ptr;
+//          ==========
 
             ptr = this->first;
 
             while (ptr != nullptr) {
 
-                ptr = ptr->next;
-                nbNodes++;
+                ptr = ptr->next; // traversing
+                listLength++; // incrementing length until end of list
 
             } // while
 
-            return nbNodes;
+            return listLength;
 
         } // Public M-Function Length
 //      =============================
 
 
 //      =======================
-//      Publuc M-Function Print
+//      Public M-Function Print
 //      =======================
 
         void DoublyLinkedList::Print() {
 
-            Node* current;
+//          ====================
+//          Variable declaration
+//          ====================
+            Node* currentNode;
+//          ==================
 
-            cout << endl;
-            cout << "===========================" << endl;
-            cout << "The list contains the following data:" << endl;
-            cout << endl;
-
+//          =================================
+//          If-then clause for error handling
+//          =================================
             if (this->Length() == 0) {
 
-                cout << "The list is empty." << endl;
-                cout << "==================" << endl;
+                cout << endl << endl;
+                cout << "     ==================" << endl;
+                cout << "     The list is empty!" << endl;
+                cout << "     ==================" << endl;
+                cout << endl;
 
+                return;
 
             } // then
+//          =========
 
+//          ========================================================================================================
+//                                                      Print Output Formatting
             else {
 
-                cout << "==============" << endl;
-                cout << "  Beginning..." << endl;
-                cout << "==============" << endl;
-                
-                current = first;
+                cout << endl;
+                cout << "                                  *** Top of List ***                            " << endl;
+                cout << "     =========================================================================" << endl;
+                cout << "       Prev Address      Current Address       Next Address          Data" << endl;
+                cout << "     -------------------------------------------------------------------------" << endl;
 
-                while (current != nullptr) {
+                currentNode = first;
 
-                    cout << "    " << current->info << endl;
+                while (currentNode != nullptr) {
+
                     
-                    current = current->next;
+                    cout << "     " << currentNode->prev << " ** " << currentNode << " ** " << currentNode->next << " _______ "
+                    << currentNode->info << endl;
+                    
+                    currentNode = currentNode->next;
 
                 } // while
 
-                cout << "========" << endl;
-                cout << "  End..." << endl;
-                cout << "========" << endl;
+                cout << "     ========================================================================" << endl;
+                cout << "     Nodes: " << this->Length() << "                    *** Bottom of List ***                        "
+                     << endl;
                 cout << endl;
+                
+
+//          =========================================================================================================
 
             } // else
 
@@ -298,12 +361,14 @@ DoublyLinkedList::DoublyLinkedList() {
 
         void DoublyLinkedList::ReversePrint(Node* currentNode) {
 
-            
             if (currentNode != nullptr) {
 
-                ReversePrint(currentNode->next);
+                ReversePrint(currentNode->next); // recursive
 
-                cout << currentNode->info << endl;
+                cout << "     " << currentNode->prev << " ** " << currentNode << " ** " << currentNode->next
+                     << " _______ " << currentNode->info << endl;
+
+                currentNode = currentNode->next;
 
             } // then
 
@@ -316,23 +381,42 @@ DoublyLinkedList::DoublyLinkedList() {
 // 
         void DoublyLinkedList::DeleteFirst() {
 
-
-
+//          =================================================
+//          If-then clauses for offloading and error handling
+//          =================================================
             if (this->Empty()) {
+
+                cout << endl << endl;
+                cout << "     ==================" << endl;
+                cout << "     The list is empty!" << endl;
+                cout << "     ==================" << endl;
+                cout << endl;
 
                 return;
 
             } // then
 
+            else if (this->Length() == 1) {
+
+                   DestroyList(); 
+
+                   return;
+
+            } // else then
+//          ==============
+
+//          ==========
+//          Node logic
+//          ===================
             Node* temp = first;
 
             first = first->next;
+            first->prev = nullptr;
 
             delete temp;
+//          =============
 
-            return;
-                
-
+            cout << "Deleted the first node in the list." << endl;
 
         } // Public M-Function DeleteFirst
 //      ==================================
@@ -343,7 +427,10 @@ DoublyLinkedList::DoublyLinkedList() {
 
         void DoublyLinkedList::Delete(int location) {
 
-            if ((location > this->Length() + 1) || (location < 1)) {
+//          =====================
+//          Error handling clause
+//          ========================================================
+            if ((location > this->Length()) || (location < 1)) {
 
                 cout << endl;
                 cout << "========================" << endl;
@@ -353,87 +440,100 @@ DoublyLinkedList::DoublyLinkedList() {
                 cout << "========================" << endl;
                 cout << endl;
 
-            } // then
+                return;
 
+            } // then
+//          =========
+
+//          =============================
+//          Offloading to other functions
+//          =============================
             else {
 
-                if (location == 1)
+                if (location == 1) {
+
                     this->DeleteFirst();
 
-                else if (location == this->Length() + 1)
+                    return;
+
+                } // then
+
+                else if (location == this->Length()) {
+
                     this->DeleteLast();
 
-                else {
+                    return;
+                } // else then
+//              ==============
 
-                    Node* temp = first;
+//                  =====================
+//                  Variable declarations
+//                  =====================
+                    Node* ptr;
+                    Node* temp;
+//                  ===========
 
-                    if (location == 1) {
+                    ptr = first;
 
-                        first = temp->next;
+                    for (int ii = 1; ii < location - 1; ii++) {
 
-                        //free(temp); // can also deallocate
-                        delete temp;
-
-                        return;
-
-                    } // then
-
-                    for (int ii = 1; temp != nullptr && ii < location - 1; ii++) {
-
-                        temp = temp->next;
+                        ptr = ptr->next; // traversing
 
                     } // for
 
-                    if (temp == nullptr || temp->next == nullptr) {
+//                  ==========
+//                  Node logic
+//                  =================
+                    temp = ptr->next;
+                    ptr->next = ptr->next->next;
+                    ptr->next->prev = ptr;
 
-                        return;
+                    delete temp;
+//                  ============
 
-                    } // then
+                    cout << endl;
+                    cout << "Deleted the node at location " << location << "." << endl;
 
-                    Node* next = temp->next->next;
-
-                    //free(temp->next); can also deallocate
-                    delete temp->next;
-
-                    temp->next = next;
-
-                } // nested else
-
-            } // outer else
+            } // else
 
         } // Public M-Function Delete
 //      =============================
 
 
-//      =============================
+//      ============================
 //      Public M-Function DeleteLast
 //      ============================
 
         void DoublyLinkedList::DeleteLast() {
 
+//          ====================
+//          Variable declaration
+//          ===================
+            Node* ptr = first;
 
-            Node* prev = nullptr;
-            Node* temp = first;
+            while (ptr->next != nullptr) {
 
-            while (temp->next != nullptr) {
-
-                prev = temp;
-                temp = temp->next;
+                ptr = ptr->next;
 
             } // while
 
-            delete temp;
+//          ==========
+//          Node logic
+//          ==========================
+            ptr->prev->next = nullptr;
 
-            prev->next = nullptr;
+            delete ptr;
+//          ===========
 
-            return;
+            cout << "Deleted the end node." << endl;
+            cout << endl;
 
+//          =====================
 
         } // Public M-Function DeleteLast
 //      =================================
 
-// 
-// 
+
 //  =====================
 //  End Public M-Function
 //  =====================
